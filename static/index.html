@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+</head>
+
+<body>
+    <div id="app">
+        <section class="section">
+            <div class="container">
+              <h1 class="title">Hands up!</h1>
+              <h2 class="subtitle">
+                People in queue:
+              </h2>
+              <ol >
+                  <li v-for="person in handList" v-on:click="(event) => { remove(event, person) }" > {{ person }}</li>
+              </ol>
+            </div>
+          </section>
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <!-- Full bundle -->
+    <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="/ui/js/app.js"></script>
+
+
+</body>
+</html>

@@ -11,4 +11,6 @@ func init() {
 	apiRoute.GET("/hands", getHands)
 	apiRoute.POST("/hands/rise", addHand)
 	apiRoute.POST("/hands/drop", dropHand)
+
+	router.Static("/ui/", "./static")
 }
