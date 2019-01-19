@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+    <link rel="stylesheet" href="https://bulma.io/css/bulma-docs.min.css?v=201901092203">
+
+</head>
+
+<body>
+    <div id="app">
+        <section class="hero is-dark is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">🙌 Hands up!</h1>
+                    <h2 class="subtitle">
+                        Be nice and respect the queue
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="bd-content">
+                <nav class="bd-links">
+                    <a class="bd-link" v-for="person in handList" v-on:click="(event) => { remove(event, person) }">
+                        <h2 class="bd-link-name">
+                            <figure class="bd-link-figure">
+                                <span class="bd-link-counter"></span>
+                            </figure>
+                            {{ person }}
+                        </h2>
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p>
+                    <strong>Hands up</strong> by <a href="https://www.meetup.com/pt-BR/DevOps-SRE-Porto-Alegre/">DevOps/SRE Meetup Porto Alegre</a>. 
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <!-- Full bundle -->
+    <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="/ui/js/app.js"></script>
+
+
+</body>
+
+</html>
