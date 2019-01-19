@@ -11,10 +11,8 @@ import (
 
 func getHands(c *gin.Context) {
 	out := data.Read()
-
 	if out == nil {
-		c.JSON(http.StatusOK, map[string]interface{}{"oops": "no hands.. yet!"})
-		return
+		out = []string{}
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{"hands": out})
