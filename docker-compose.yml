@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  webserver:
+    build: .
+    image: devopssrepoa/hands-up
+    ports:
+      - 3000:8080
