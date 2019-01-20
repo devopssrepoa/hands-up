@@ -8,7 +8,7 @@ new Vue({
     },
     mounted() {
         axios
-            .get('http://localhost:3000/api/hands')
+            .get('/api/hands')
             .then(response => (this.handList = response.data.hands))
             .catch(error => console.log(error))
     },
