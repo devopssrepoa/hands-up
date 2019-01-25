@@ -1,0 +1,19 @@
+ol {
+    list-style: none;
+    counter-reset: who-counter;
+}
+ol li {
+    counter-increment: who-counter;
+    font-size: 1.5em;
+    padding: 1rem 3rem 1.5rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+ol li:hover {
+    background-color: #fafafa;
+}
+ol li:before {
+    content: counter(who-counter) " ";
+    color: #3273dc;
+    font-weight: 400;
+}
