@@ -3,45 +3,87 @@ new Vue({
     data() {
         return {
             handList: null,
-            counter: 0
+            who: '',
+            newWho: '',
         }
     },
-    mounted() {
-        axios
-            .get('/api/hands')
-            .then(response => (this.handList = response.data.hands))
-            .catch(error => console.log(error))
-    },
     methods: {
-        remove: function (event, who) {
+        requestRemove: function (event, who, confirm) {
 
             var vueStuff = this;
 
-            this.$dialog.confirm({
-                message: 'Delete from Queue?',
-                onConfirm: function () {
-                    var bodyFormData = new FormData();
-                    bodyFormData.set('who', who);
-                    axios({
-                        method: 'post',
-                        url: '/api/hands/drop',
-                        data: bodyFormData,
-                        config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-                    })
-                        .then(function (response) {
-                            console.log(response);
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
+            if (confirm == true) {
+                this.$dialog.confirm({
+                    message: 'Remove from Queue?',
+                    onConfirm: () => this.remove(event, who, this)
+                });
+            } else {
+                this.remove(event, who, this);
+            }
+        },
+        remove: function (event, who, context) {
+            var vueStuff = context;
+        
+            var bodyFormData = new FormData();
+            bodyFormData.set('who', who);
+            axios({
+                method: 'post',
+                url: '/api/hands/drop',
+                data: bodyFormData,
+                config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        add: function (event, who) {
 
+            var vueStuff = this;
 
-                    var index = vueStuff.handList.indexOf(who);
-                    if (index > -1) {
-                        vueStuff.handList.splice(index, 1);
-                    }
+            var bodyFormData = new FormData();
+            bodyFormData.set('who', who);
+            axios({
+                method: 'post',
+                url: '/api/hands/rise',
+                data: bodyFormData,
+                config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        getHands: function (event) {
+            axios
+            .get('/api/hands')
+            .then(response => (this.handList = response.data.hands))
+            .catch(error => console.log(error))
+        },
+        saveWho: function () {
+            if (this.newWho !== localStorage.who) {
+                localStorage.who = this.newWho;
+                if (this.handList !== null && this.handList.indexOf(this.who) != -1) {
+                    this.remove(event,this.who,this);
                 }
-            });
+                this.who = localStorage.who;
+            }
         }
+    },
+    mounted: function () { 
+        this.getHands();
+
+        if (localStorage.who) {
+            this.who = localStorage.who;
+            this.newWho = localStorage.who;
+          }
+
+        setInterval(function () {
+            this.getHands();
+          }.bind(this), 1000); 
     }
 })
