@@ -23,12 +23,14 @@
         </section>
         <section class="section">
         <div class="container">
-            <p>Right now you are <b>{{who}}</b></p>
-            <div class="field is-grouped" id="who">
-                <input class="input" v-model="newWho" v-on:keyup.enter="saveWho">
+            <div class="field is-grouped"  v-if="who == ''">
+                <input class="input" id="who" name="who" v-on:keyup.enter="saveWho">
                 <button class="button is-black" @click="saveWho">Save</button>
             </div>
-            <div class="bd-content level" v-if="who != ''">
+            <div v-if="who != ''">
+                <div class="level-item">
+                    <p><b>{{who}} <a @click="who=''">Change</a></b></p>
+                </div>
                 <div class="level-item" >
                     <figure class="image is-128x128">
                         <a v-if="handList != null && handList.indexOf(who) != -1" v-on:click="(event) => { requestRemove(event, who, false) }">
@@ -36,7 +38,7 @@
                             <p class="has-text-centered">Drop hand</p>
                         </a>
                         <a v-else>
-                            <img src="/ui/imgs/gopher_handsup.png" v-on:click="(event) => { add(event, who) }">
+                                <img src="/ui/imgs/gopher_handsup.png" v-on:click="(event) => { modify(event, 'rise', who) }">
                             <p class="has-text-centered">Raise hand</p>
                         </a>
                     </figure>
