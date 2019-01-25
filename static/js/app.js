@@ -66,17 +66,24 @@ new Vue({
         },
         saveWho: function () {
             if (this.newWho !== localStorage.who) {
-                localStorage.who = this.newWho;
-                if (this.handList !== null && this.handList.indexOf(this.who) != -1) {
-                    this.remove(event,this.who,this);
+                if (this.handList !== null && this.handList.indexOf(this.newWho) != -1) {
+                    this.$toast.open({
+                        message: "You can't impersonate someone from the queue!",
+                        type: 'is-danger'
+                    })
+                } else {
+                    localStorage.who = this.newWho;
+                    if (this.handList !== null && this.handList.indexOf(this.who) != -1) {
+                        this.remove(event,this.who,this);
+                    }
+                    this.who = localStorage.who;
                 }
-                this.who = localStorage.who;
             }
         }
     },
     mounted: function () { 
         this.getHands();
-
+        
         if (localStorage.who) {
             this.who = localStorage.who;
             this.newWho = localStorage.who;
