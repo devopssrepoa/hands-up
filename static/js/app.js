@@ -3,45 +3,60 @@ new Vue({
     data() {
         return {
             handList: null,
-            counter: 0
+            who: ''
         }
-    },
-    mounted() {
-        axios
-            .get('/api/hands')
-            .then(response => (this.handList = response.data.hands))
-            .catch(error => console.log(error))
     },
     methods: {
-        remove: function (event, who) {
+        requestRemove: function (event, who, confirm) {
+            if (confirm == true) {
+                this.$dialog.confirm({
+                    message: 'Remove from Queue?',
+                    onConfirm: () => this.modify(event, 'drop', who, this)
+                });
+                return 
+            }
+            this.modify(event, 'drop', who, this);
+        },
+        modify: function (event, action, who, context) {
 
-            var vueStuff = this;
-
-            this.$dialog.confirm({
-                message: 'Delete from Queue?',
-                onConfirm: function () {
-                    var bodyFormData = new FormData();
-                    bodyFormData.set('who', who);
-                    axios({
-                        method: 'post',
-                        url: '/api/hands/drop',
-                        data: bodyFormData,
-                        config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-                    })
-                        .then(function (response) {
-                            console.log(response);
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-
-
-                    var index = vueStuff.handList.indexOf(who);
-                    if (index > -1) {
-                        vueStuff.handList.splice(index, 1);
-                    }
-                }
-            });
+            var bodyFormData = new FormData();
+            bodyFormData.set('who', who);
+            axios({
+                method: 'post',
+                url: `/api/hands/${action}`,
+                data: bodyFormData,
+                config: { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        getHands: function (event) {
+            axios
+                .get('/api/hands')
+                .then(response => (this.handList = response.data.hands))
+                .catch(error => console.log(error))
+        },
+        saveWho: function () {
+            if (this.handList !== null && this.handList.indexOf(document.getElementById('who').value) != -1) {
+                this.$toast.open({
+                    message: "You can't impersonate someone from the queue!",
+                    type: 'is-danger'
+                })
+                return;
+            }
+            
+            this.who = document.getElementById('who').value;
         }
+    },
+    mounted: function () { 
+        this.getHands();
+
+        setInterval(function () {
+            this.getHands();
+          }.bind(this), 1000); 
     }
 })
